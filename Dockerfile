@@ -31,3 +31,5 @@ RUN yum install -y supervisor && \
     yum clean all
 
 ADD supervisord.conf /etc/supervisord.d/supervisord.conf
+
+RUN supervisord -c /etc/supervisord.d/supervisord.conf
