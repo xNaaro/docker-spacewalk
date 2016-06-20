@@ -1,0 +1,16 @@
+admin-email = root@localhost
+ssl-set-org = Local Example
+ssl-set-org-unit = example
+ssl-set-city = Madrid
+ssl-set-state = Madrid
+ssl-set-country = ES
+ssl-password = temporal
+ssl-set-email = root@localhost
+ssl-config-sslvhost = Y
+db-backend=postgresql
+db-name=spaceschema
+db-user=spaceuser
+db-password=temporal
+db-host=localhost
+db-port=5432
+enable-tftp=Y
