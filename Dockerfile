@@ -23,6 +23,11 @@ RUN yum -y install \
 
 COPY answerfile.txt /tmp/answerfile.txt
 
-EXPOSE 80 443
+EXPOSE 80 443 5222 68 69
 
-RUN spacewalk-setup --answer-file /tmp/answerfile.txt 
+USER root
+
+RUN yum install -y supervisor && \
+    yum clean all
+
+ADD supervisord.conf /etc/supervisord.d/supervisord.conf
