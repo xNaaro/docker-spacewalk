@@ -15,21 +15,27 @@ RUN rpm --import http://www.jpackage.org/jpackage.asc && \
 
 RUN yum -y install \
         spacewalk-setup-postgresql && \
-        yum clean all
-
-RUN yum -y install \
         spacewalk-postgresql && \
+        supervisor &&  \
         yum clean all
 
 COPY answerfile.txt /tmp/answerfile.txt
 
 EXPOSE 80 443 5222 68 69
 
+USER postgres
+RUN /usr/bin/pg_ctl initdb  -D /var/lib/pgsql/data/
+RUN /usr/bin/pg_ctl start -D /var/lib/pgsql/data/  -w -t 300 && \
+     psql -c 'CREATE DATABASE spaceschema' && \
+     psql -c "CREATE USER spaceuser WITH PASSWORD 'spacepw'" && \
+     psql -c 'ALTER ROLE spaceuser SUPERUSER' && \
+     createlang pltclu spaceschema
+
 USER root
 
-RUN yum install -y supervisor && \
-    yum clean all
+RUN su -c "/usr/bin/pg_ctl start -D /var/lib/pgsql/data/  -w -t 300" postgres && \
+    su -c "spacewalk-setup --answer-file=/tmp/answerfile.txt --skip-db-diskspace-check --skip-db-install" root ; exit 0
 
 ADD supervisord.conf /etc/supervisord.d/supervisord.conf
 
-RUN supervisord -c /etc/supervisord.d/supervisord.conf
+ENTRYPOINT supervisord -c /etc/supervisord.d/supervisord.conf
