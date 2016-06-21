@@ -14,9 +14,9 @@ RUN rpm --import http://www.jpackage.org/jpackage.asc && \
     yum clean all
 
 RUN yum -y install \
-        spacewalk-setup-postgresql && \
-        spacewalk-postgresql && \
-        supervisor &&  \
+        spacewalk-setup-postgresql \
+        spacewalk-postgresql \
+        supervisor  \
         yum clean all
 
 COPY answerfile.txt /tmp/answerfile.txt
